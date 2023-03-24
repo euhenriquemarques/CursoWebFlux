@@ -1,5 +1,7 @@
 package com.hmarques.webfluxcourse.controller;
 
+import com.hmarques.webfluxcourse.model.request.UserRequest;
+import com.hmarques.webfluxcourse.model.response.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,16 +20,17 @@ public interface UserController {
 
 
   @GetMapping(value = "/{id}")
-  ResponseEntity<Mono<UserResponse>> find(@PathVariable String id );
+  ResponseEntity<Mono<UserResponse>> find(@PathVariable String id);
 
   @GetMapping
   ResponseEntity<Flux<UserResponse>> findAll();
 
   @PatchMapping(value = "{/id}")
-  ResponseEntity<Mono<UserResponse>> update (@PathVariable String id, @RequestBody UserRequest request) ;
+  ResponseEntity<Mono<UserResponse>> update(@PathVariable String id,
+      @RequestBody UserRequest request);
 
   @DeleteMapping(value = {"/id"})
-  ResponseEntity<Mono<Void>> delete (@PathVariable String id);
+  ResponseEntity<Mono<Void>> delete(@PathVariable String id);
 
 
 }
