@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:<password>@webfluxcoursecluster.dgpbpte.mongodb.net/HENRIQUE_WEB_FLUX?retryWrites=true&w=majority
