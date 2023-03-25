@@ -25,7 +25,7 @@ public interface UserController {
   @GetMapping
   ResponseEntity<Flux<UserResponse>> findAll();
 
-  @PatchMapping(value = "{/id}")
+  @PatchMapping(value = "/{id}")
   ResponseEntity<Mono<UserResponse>> update(@PathVariable String id,
       @RequestBody UserRequest request);
 
