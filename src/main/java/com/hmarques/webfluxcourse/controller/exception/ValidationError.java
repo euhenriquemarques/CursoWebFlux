@@ -17,13 +17,12 @@ public class ValidationError extends StandardError implements Serializable {
 
   private final List<FieldError> errors = new ArrayList();
 
-  ValidationError(LocalDateTime timestamp, String path, Integer status, String error,
-      String message) {
+  ValidationError(LocalDateTime timestamp, String path, Integer status, String error, String message) {
     super(timestamp, path, status, error, message);
 
   }
 
-  public void addError(String fieldName, String message){
+  public void addError(String fieldName, String message) {
     this.errors.add(new FieldError(fieldName, message));
   }
 
