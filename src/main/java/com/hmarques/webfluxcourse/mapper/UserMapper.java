@@ -19,5 +19,4 @@ public interface UserMapper {
   @Mapping(target = "id", ignore = true)
   User toEntity(final UserRequest request);
 
-
 }
