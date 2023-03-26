@@ -1,6 +1,7 @@
 package com.hmarques.webfluxcourse.controller.impl;
 
 import com.hmarques.webfluxcourse.controller.UserController;
+import com.hmarques.webfluxcourse.mapper.UserMapper;
 import com.hmarques.webfluxcourse.model.request.UserRequest;
 import com.hmarques.webfluxcourse.model.response.UserResponse;
 import com.hmarques.webfluxcourse.service.UserService;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
 public class UserControllerImpl implements UserController {
 
   private final UserService service;
+  private final UserMapper mapper;
 
   @Override
   public ResponseEntity<Mono<Void>> save(UserRequest request) {
@@ -25,8 +27,8 @@ public class UserControllerImpl implements UserController {
   }
 
   @Override
-  public ResponseEntity<Mono<UserResponse>> find(String id) {
-    return null;
+  public ResponseEntity<Mono<UserResponse>> findById(String id) {
+    return ResponseEntity.ok().body(service.findById(id).map(mapper::toResponse));
   }
 
   @Override

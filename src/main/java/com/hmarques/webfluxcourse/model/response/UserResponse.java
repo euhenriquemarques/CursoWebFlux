@@ -2,7 +2,7 @@ package com.hmarques.webfluxcourse.model.response;
 
 public record UserResponse(
     String id,
-    String nome,
+    String name,
     String email,
     String password
 ) {
