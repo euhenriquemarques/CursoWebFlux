@@ -9,6 +9,7 @@ import com.hmarques.webfluxcourse.repository.UserRepository;
 import com.hmarques.webfluxcourse.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -23,9 +24,13 @@ public class UserService {
     return repository.save(mapper.toEntity(request));
   }
 
-  public Mono<User> findById(final String id){
-    return repository.findById(id).switchIfEmpty(Mono.error(
-        new ObjectNotFoundException(format("Not Found. Id %s, Type: %s", id, User.class.getSimpleName() ))
-    ));
+  public Mono<User> findById(final String id) {
+    return repository.findById(id).switchIfEmpty(
+        Mono.error(new ObjectNotFoundException(format("Not Found. Id %s, Type: %s", id, User.class.getSimpleName()))));
+  }
+
+
+  public Flux<User> findAll() {
+    return repository.findAll();
   }
 }
