@@ -9,6 +9,7 @@ import com.hmarques.webfluxcourse.model.request.UserRequest;
 import com.hmarques.webfluxcourse.model.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = IGNORE, nullValueCheckStrategy = ALWAYS)
 public interface UserMapper {
@@ -18,4 +19,6 @@ public interface UserMapper {
 
   UserResponse toResponse (final User entity);
 
+  @Mapping(target = "id", ignore = true)
+  User toEntity(final UserRequest request, @MappingTarget final User entity);
 }
