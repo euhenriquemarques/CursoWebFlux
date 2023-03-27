@@ -1,9 +1,12 @@
 package com.hmarques.webfluxcourse.service;
 
+import static java.lang.String.format;
+
 import com.hmarques.webfluxcourse.entity.User;
 import com.hmarques.webfluxcourse.mapper.UserMapper;
 import com.hmarques.webfluxcourse.model.request.UserRequest;
 import com.hmarques.webfluxcourse.repository.UserRepository;
+import com.hmarques.webfluxcourse.service.exception.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -21,6 +24,8 @@ public class UserService {
   }
 
   public Mono<User> findById(final String id){
-    return repository.findById(id);
+    return repository.findById(id).switchIfEmpty(Mono.error(
+        new ObjectNotFoundException(format("Not Found. Id %s, Type: %s", id, User.class.getSimpleName() ))
+    ));
   }
 }
