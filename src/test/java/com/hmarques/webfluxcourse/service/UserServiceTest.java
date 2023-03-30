@@ -2,6 +2,7 @@ package com.hmarques.webfluxcourse.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -47,5 +48,20 @@ class UserServiceTest {
     StepVerifier.create(result).expectNextMatches(user -> user != null).expectComplete().verify();
     Mockito.verify(repository, times(1)).save(any(User.class));
 
+  }
+
+
+  @Test
+  void findById() {
+    when(repository.findById(anyString())).thenReturn(Mono.just(User.builder()
+        .id("1234").build()));
+
+    Mono<User> result = service.findById("123");
+
+    StepVerifier.create(result).expectNextMatches(user -> user.getClass() == User.class
+            && user != null
+            && user.getId() == "1234")
+        .expectComplete().verify();
+    Mockito.verify(repository, times(1)).findById(anyString());
   }
 }
