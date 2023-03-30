@@ -92,4 +92,18 @@ class UserServiceTest {
 
 
   }
+
+
+  @Test
+  void delete(){
+    User entity = User.builder().build();
+    when(repository.findAndRemove((anyString()))).thenReturn(Mono.just(entity));
+
+    Mono<User> result = service.delete("132");
+
+    StepVerifier.create(result).expectNextMatches(user -> user != null).expectComplete().verify();
+    Mockito.verify(repository, times(1)).findAndRemove(anyString());
+
+
+  }
 }
