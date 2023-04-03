@@ -1,11 +1,14 @@
 package com.hmarques.webfluxcourse.controller.impl;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.hmarques.webfluxcourse.entity.User;
 import com.hmarques.webfluxcourse.mapper.UserMapper;
 import com.hmarques.webfluxcourse.model.request.UserRequest;
+import com.hmarques.webfluxcourse.model.response.UserResponse;
 import com.hmarques.webfluxcourse.service.UserService;
 import com.mongodb.reactivestreams.client.MongoClient;
 import org.junit.jupiter.api.Test;
@@ -21,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
@@ -45,7 +49,7 @@ class UserControllerImplTest {
   void save() {
     UserRequest userRequest = new UserRequest("henrique", "henrique@henrique.com", "123");
 
-    Mockito.when(service.save(any(UserRequest.class))).thenReturn(Mono.just(User.builder().build()));
+    when(service.save(any(UserRequest.class))).thenReturn(Mono.just(User.builder().build()));
     webTestClient.post()
         .uri("/users")
         .contentType(MediaType.APPLICATION_JSON)
@@ -80,10 +84,45 @@ class UserControllerImplTest {
 
   @Test
   void findById() {
+
+    var id = "1233";
+    final var userResponse = new UserResponse(id, "henrique", "123@123.com","123");
+
+    when(service.findById(anyString())).thenReturn(Mono.just(User.builder().build()));
+    when(mapper.toResponse(any(User.class))).thenReturn(userResponse);
+
+
+    webTestClient.get().uri("/users/"+id)
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$.id").isEqualTo(userResponse.id())
+        .jsonPath("$.email").isEqualTo(userResponse.email())
+        .jsonPath("$.name").isEqualTo(userResponse.name())
+        .jsonPath("$.password").isEqualTo(userResponse.password());
   }
 
   @Test
   void findAll() {
+
+    var id = "1233";
+    final var userResponse = new UserResponse(id, "henrique", "123@123.com","123");
+
+    when(service.findAll()).thenReturn(Flux.just(User.builder().build()));
+    when(mapper.toResponse(any(User.class))).thenReturn(userResponse);
+
+    webTestClient.get().uri("/users")
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus()
+        .isOk()
+        .expectBody()
+        .jsonPath("$[0].id").isEqualTo(userResponse.id())
+        .jsonPath("$[0].email").isEqualTo(userResponse.email())
+        .jsonPath("$[0].name").isEqualTo(userResponse.name())
+        .jsonPath("$[0].password").isEqualTo(userResponse.password());
   }
 
   @Test
